@@ -82,7 +82,7 @@ public class Project1 {
 
     @SuppressWarnings("CallToPrintStackTrace")
     private static String getFile() {
-        Path path = Paths.get("src", "input.txt");
+        Path path = Paths.get(System.getProperty("user.dir"), "input.txt");
         try {
             byte[] bytes = Files.readAllBytes(path);
             return new String(bytes);

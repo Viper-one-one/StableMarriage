@@ -1,4 +1,6 @@
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /*
 * Made by Taylor Nastally, 04/23/2024
@@ -30,7 +32,7 @@ public class Project1 {
         printMatrix(matrixTwo);
         System.out.println();
 
-        int[][] matchingMatrix = getMatchingMatrix(fileContents, size, 0);
+        int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
         System.out.println("Extracted values from Matching Matrix: ");
         printMatrix(matchingMatrix);
         System.out.println();
@@ -40,7 +42,7 @@ public class Project1 {
         return matrixNum == 1 ? 1 : size + 1;
     }
 
-    private static int[][] getMatchingMatrix(String contents, int size, int range) {
+    private static int[][] getMatchingMatrix(String contents, int size) {
         String[] lines = contents.split("\n");
         int[][] matrix = new int[size][2];
 
@@ -78,6 +80,7 @@ public class Project1 {
         return matrix;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     private static String getFile() {
         Path path = Paths.get("src", "input.txt");
         try {

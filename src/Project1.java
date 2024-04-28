@@ -8,6 +8,54 @@ import java.nio.file.Paths;
 
 public class Project1 {
     public static void main(String[] args) {
+        calculateRuntime();
+        /*String fileContents = getFile();
+        System.out.println("File contents: ");
+        System.out.println(fileContents + "\n");
+        if (fileContents == null) {
+            System.out.println("File not found or other error occurred. Exiting.");
+            return;
+        }
+
+        char sizeChar = fileContents.charAt(0);
+        int size = Character.getNumericValue(sizeChar);
+        System.out.println("Size of matrices: " + sizeChar + "\n");
+
+        int rangeOne = getRange(size, 1);
+        int[][] matrixOne = getPreferencesMatrix(fileContents, size, rangeOne);
+        System.out.println("Extracted values from Matrix 1: ");
+        printMatrix(matrixOne);
+        System.out.println();
+
+        int rangeTwo = getRange(size, 2);
+        int[][] matrixTwo = getPreferencesMatrix(fileContents, size, rangeTwo);
+        System.out.println("Extracted values from Matrix 2: ");
+        printMatrix(matrixTwo);
+        System.out.println();
+
+        int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
+        System.out.println("Extracted values from Matching Matrix: ");
+        printMatrix(matchingMatrix);
+        System.out.println();
+
+        int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
+        System.out.println("Number of instabilities: " + instabilities);*/
+    }
+
+    /*
+    * debug and optimization function
+    * remove before submission
+    * */
+    private static void calculateRuntime() {
+        // Get the Java runtime
+        Runtime runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+        long memoryBefore = runtime.totalMemory() - runtime.freeMemory();
+        // Record start time
+        long startTime = System.currentTimeMillis();
+        // ... your existing code ...
         String fileContents = getFile();
         System.out.println("File contents: ");
         System.out.println(fileContents + "\n");
@@ -36,6 +84,67 @@ public class Project1 {
         System.out.println("Extracted values from Matching Matrix: ");
         printMatrix(matchingMatrix);
         System.out.println();
+
+        int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
+        System.out.println("Number of instabilities: " + instabilities);
+        // Record end time
+        long endTime = System.currentTimeMillis();
+        // Run the garbage collector again
+        runtime.gc();
+        // Calculate the used memory after running the program
+        long memoryAfter = runtime.totalMemory() - runtime.freeMemory();
+
+        // Calculate the time taken
+        long timeTaken = endTime - startTime;
+        // Calculate the memory used by your program
+        long memoryUsed = memoryAfter - memoryBefore;
+        double memoryUsedInMB = memoryUsed / (1024.0 * 1024.0);
+        System.out.println("Time taken: " + timeTaken + " milliseconds");
+        System.out.println("Memory used: " + memoryUsed + " bytes");
+        System.out.println("Memory used: " + memoryUsedInMB + " MB");
+    }
+
+    private static int evaluateInstabilities(int[][] menPreferences, int[][] womenPreferences, int[][] matching) {
+        int size = menPreferences.length;
+        int instabilities = 0;
+
+        // Iterate over all pairs of individuals
+        for (int man = 0; man < size; man++) {
+            for (int woman = 0; woman < size; woman++) {
+                // man is left col and woman is right col, this means the current partners are the opposite cols
+                int currentPartnerOfMan = matching[man][1];
+                int currentPartnerOfWoman = matching[woman][0];
+
+                // Check if man prefers woman over his current partner
+                boolean manPrefers = false;
+                for (int i = 0; i < size; i++) {
+                    if (menPreferences[man][i] != matching[man][1]) {
+                        manPrefers = true;
+                        break;
+                    } else if (menPreferences[man][i] == currentPartnerOfMan) {
+                        break;
+                    }
+                }
+
+                // Check if woman prefers man over her current partner
+                boolean womanPrefers = false;
+                for (int i = 0; i < size; i++) {
+                    if (womenPreferences[woman][i] != matching[woman][0]) {
+                        womanPrefers = true;
+                        break;
+                    } else if (womenPreferences[woman][i] == currentPartnerOfWoman) {
+                        break;
+                    }
+                }
+
+                // If both man and woman prefer each other over their current partners, it's an instability
+                if (manPrefers && womanPrefers) {
+                    instabilities++;
+                }
+            }
+        }
+
+        return instabilities;
     }
 
     private static int getRange(int size, int matrixNum) {

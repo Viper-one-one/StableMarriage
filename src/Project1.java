@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 
 public class Project1 {
     public static void main(String[] args) {
-        calculateRuntime();
-        /*String fileContents = getFile();
+        // calculateRuntime();
+        String fileContents = getFile();
         System.out.println("File contents: ");
         System.out.println(fileContents + "\n");
         if (fileContents == null) {
@@ -39,14 +39,14 @@ public class Project1 {
         System.out.println();
 
         int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
-        System.out.println("Number of instabilities: " + instabilities);*/
+        System.out.println("Number of instabilities: " + instabilities);
     }
 
     /*
     * debug and optimization function
     * remove before submission
-    * */
-    private static void calculateRuntime() {
+    *
+   private static void calculateRuntime() {
         // Get the Java runtime
         Runtime runtime = Runtime.getRuntime();
         // Run the garbage collector
@@ -98,49 +98,68 @@ public class Project1 {
         long timeTaken = endTime - startTime;
         // Calculate the memory used by your program
         long memoryUsed = memoryAfter - memoryBefore;
-        double memoryUsedInMB = memoryUsed / (1024.0 * 1024.0);
+        double memoryUsedInMB = memoryUsed / (1000.0 * 1000.0);
         System.out.println("Time taken: " + timeTaken + " milliseconds");
         System.out.println("Memory used: " + memoryUsed + " bytes");
         System.out.println("Memory used: " + memoryUsedInMB + " MB");
-    }
+    }*/
 
     private static int evaluateInstabilities(int[][] menPreferences, int[][] womenPreferences, int[][] matching) {
         int size = menPreferences.length;
         int instabilities = 0;
+        boolean manPrefers;
+        boolean womanPrefers;
+        int currentPartnerOfMan;
+        int currentPartnerOfWoman;
 
         // Iterate over all pairs of individuals
         for (int man = 0; man < size; man++) {
+            currentPartnerOfMan = matching[man][1];
             for (int woman = 0; woman < size; woman++) {
+                currentPartnerOfWoman = matching[woman][0];
+                manPrefers = false;
                 // man is left col and woman is right col, this means the current partners are the opposite cols
-                int currentPartnerOfMan = matching[man][1];
-                int currentPartnerOfWoman = matching[woman][0];
-
                 // Check if man prefers woman over his current partner
-                boolean manPrefers = false;
+                int currentPartnerIndex = 0;
                 for (int i = 0; i < size; i++) {
-                    if (menPreferences[man][i] != matching[man][1]) {
+                    for (int j = 0; j < size; j++) {
+                        if (menPreferences[i][j] == currentPartnerOfMan) {
+                            currentPartnerIndex = j;
+                            break;
+                        }
+                    }
+                    if (menPreferences[man][i] != currentPartnerOfMan && i < currentPartnerIndex) {
                         manPrefers = true;
                         break;
                     } else if (menPreferences[man][i] == currentPartnerOfMan) {
                         break;
+                        // he is matched with his best partner
                     }
+
                 }
 
+                currentPartnerIndex = 0;
+                womanPrefers = false;
                 // Check if woman prefers man over her current partner
-                boolean womanPrefers = false;
                 for (int i = 0; i < size; i++) {
-                    if (womenPreferences[woman][i] != matching[woman][0]) {
+                    for (int j = 0; j < size; j++) {
+                        if (womenPreferences[i][j] == currentPartnerOfWoman) {
+                            currentPartnerIndex = j;
+                            break;
+                        }
+                    }
+                    if (womenPreferences[woman][i] != currentPartnerOfWoman && i < currentPartnerIndex) {
                         womanPrefers = true;
                         break;
                     } else if (womenPreferences[woman][i] == currentPartnerOfWoman) {
                         break;
+                        // she is matched with her best partner
                     }
                 }
 
                 // If both man and woman prefer each other over their current partners, it's an instability
-                if (manPrefers && womanPrefers) {
+                if (manPrefers && womanPrefers)
                     instabilities++;
-                }
             }
         }
 

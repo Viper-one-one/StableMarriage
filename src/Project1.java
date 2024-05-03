@@ -10,8 +10,6 @@ public class Project1 {
     public static void main(String[] args) {
         // calculateRuntime();
         String fileContents = getFile();
-        System.out.println("File contents: ");
-        System.out.println(fileContents + "\n");
         if (fileContents == null) {
             System.out.println("File not found or other error occurred. Exiting.");
             return;
@@ -19,24 +17,14 @@ public class Project1 {
 
         char sizeChar = fileContents.charAt(0);
         int size = Character.getNumericValue(sizeChar);
-        System.out.println("Size of matrices: " + sizeChar + "\n");
 
         int rangeOne = getRange(size, 1);
         int[][] matrixOne = getPreferencesMatrix(fileContents, size, rangeOne);
-        System.out.println("Extracted values from Matrix 1: ");
-        printMatrix(matrixOne);
-        System.out.println();
 
         int rangeTwo = getRange(size, 2);
         int[][] matrixTwo = getPreferencesMatrix(fileContents, size, rangeTwo);
-        System.out.println("Extracted values from Matrix 2: ");
-        printMatrix(matrixTwo);
-        System.out.println();
 
         int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
-        System.out.println("Extracted values from Matching Matrix: ");
-        printMatrix(matchingMatrix);
-        System.out.println();
 
         int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
         System.out.println("Number of instabilities: " + instabilities);

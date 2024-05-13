@@ -27,7 +27,7 @@ public class Project1 {
         int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
 
         int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
-        System.out.println("Number of instabilities: " + instabilities);
+        System.out.println(instabilities);
     }
 
     /*
@@ -95,59 +95,26 @@ public class Project1 {
     private static int evaluateInstabilities(int[][] menPreferences, int[][] womenPreferences, int[][] matching) {
         int size = menPreferences.length;
         int instabilities = 0;
-        boolean manPrefers;
-        boolean womanPrefers;
-        int currentPartnerOfMan;
-        int currentPartnerOfWoman;
+        int manCurrentPartner = Integer.MAX_VALUE;
+        int womanCurrentPartner = Integer.MAX_VALUE;
 
         // Iterate over all pairs of individuals
-        for (int man = 0; man < size; man++) {
-            currentPartnerOfMan = matching[man][1];
-            for (int woman = 0; woman < size; woman++) {
-                currentPartnerOfWoman = matching[woman][0];
-                manPrefers = false;
-                // man is left col and woman is right col, this means the current partners are the opposite cols
-                // Check if man prefers woman over his current partner
-                int currentPartnerIndex = 0;
-                for (int i = 0; i < size; i++) {
-                    for (int j = 0; j < size; j++) {
-                        if (menPreferences[i][j] == currentPartnerOfMan) {
-                            currentPartnerIndex = j;
-                            break;
-                        }
-                    }
-                    if (menPreferences[man][i] != currentPartnerOfMan && i < currentPartnerIndex) {
-                        manPrefers = true;
-                        break;
-                    } else if (menPreferences[man][i] == currentPartnerOfMan) {
-                        break;
-                        // he is matched with his best partner
-                    }
-
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (menPreferences[i][j] == matching[i][1])
+                    manCurrentPartner = j;
+                if (womenPreferences[i][j] == matching[i][0])
+                    womanCurrentPartner = j;
+                if (manCurrentPartner != Integer.MAX_VALUE && womanCurrentPartner != Integer.MAX_VALUE)
+                    break;
+            }
+            for (int j = 0; j < size; j++) {
+                for (int k = 0; k < size; k++) {
+                    // If both man and woman prefer each other over their current partners, it's an instability
+                    if (menPreferences[j][k] == matching[i][1] && menPreferences[i][j] != matching[i][0] && j < manCurrentPartner
+                            && womenPreferences[j][k] == matching[j][0] && womenPreferences[i][j] != matching[i][1] && k < womanCurrentPartner)
+                        instabilities++;
                 }
-
-                currentPartnerIndex = 0;
-                womanPrefers = false;
-                // Check if woman prefers man over her current partner
-                for (int i = 0; i < size; i++) {
-                    for (int j = 0; j < size; j++) {
-                        if (womenPreferences[i][j] == currentPartnerOfWoman) {
-                            currentPartnerIndex = j;
-                            break;
-                        }
-                    }
-                    if (womenPreferences[woman][i] != currentPartnerOfWoman && i < currentPartnerIndex) {
-                        womanPrefers = true;
-                        break;
-                    } else if (womenPreferences[woman][i] == currentPartnerOfWoman) {
-                        break;
-                        // she is matched with her best partner
-                    }
-                }
-
-                // If both man and woman prefer each other over their current partners, it's an instability
-                if (manPrefers && womanPrefers)
-                    instabilities++;
             }
         }
 

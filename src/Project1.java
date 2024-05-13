@@ -95,30 +95,55 @@ public class Project1 {
     private static int evaluateInstabilities(int[][] menPreferences, int[][] womenPreferences, int[][] matching) {
         int size = menPreferences.length;
         int instabilities = 0;
-        int manCurrentPartner = Integer.MAX_VALUE;
-        int womanCurrentPartner = Integer.MAX_VALUE;
+        int[] manCurrentWifeIndexAndValue;
+        int[] womanCurrentHusbandIndexAndValue;
 
         // Iterate over all pairs of individuals
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if (menPreferences[i][j] == matching[i][1])
-                    manCurrentPartner = j;
-                if (womenPreferences[i][j] == matching[i][0])
-                    womanCurrentPartner = j;
-                if (manCurrentPartner != Integer.MAX_VALUE && womanCurrentPartner != Integer.MAX_VALUE)
-                    break;
-            }
-            for (int j = 0; j < size; j++) {
-                for (int k = 0; k < size; k++) {
-                    // If both man and woman prefer each other over their current partners, it's an instability
-                    if (menPreferences[j][k] == matching[i][1] && menPreferences[i][j] != matching[i][0] && j < manCurrentPartner
-                            && womenPreferences[j][k] == matching[j][0] && womenPreferences[i][j] != matching[i][1] && k < womanCurrentPartner)
-                        instabilities++;
-                }
+            manCurrentWifeIndexAndValue = getCurrentWifeIndex(menPreferences, matching, i);
+            womanCurrentHusbandIndexAndValue = getCurrentHusbandIndex(womenPreferences, matching, i);
+            for (int k = 0; k < size; k++) {
+                // If both man and woman prefer each other over their current partners, it's an instability
+                if (menPreferences[i][k] != manCurrentWifeIndexAndValue[0] && k < manCurrentWifeIndexAndValue[1] &&
+                        womenPreferences[i][k] != womanCurrentHusbandIndexAndValue[0] && k < womanCurrentHusbandIndexAndValue[1])
+                    instabilities++;
             }
         }
-
         return instabilities;
+    }
+
+    private static int[] getCurrentHusbandIndex(int[][] preferences, int[][] matching, int wife) {
+        int[] result = new int[2];
+        for (int[] pairing : matching) {
+            if (pairing[1] == wife + 1) {
+                result[0] = pairing[0];
+                break;
+            }
+        }
+        for (int i = 0; i < preferences[wife].length; i++) {
+            if (preferences[wife][i] == result[0]) {
+                result[1] = i;
+                return result;
+            }
+        }
+        result[1] = Integer.MAX_VALUE;
+        return result;
+    }
+
+    private static int[] getCurrentWifeIndex(int[][] preferences, int[][] matching, int husband) {
+        int[] result = new int[2];
+        for (int[] pairing : matching) {
+            if (pairing[0] == husband + 1)
+                result[0] = pairing[1];
+        }
+        for (int i = 0; i < preferences[husband].length; i++) {
+            if (preferences[husband][i] == result[0]) {
+                result[1] = i;
+                return result;
+            }
+        }
+        result[1] = Integer.MAX_VALUE;
+        return result;
     }
 
     private static int getRange(int size, int matrixNum) {

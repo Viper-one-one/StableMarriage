@@ -1,14 +1,15 @@
+/*
+ * Made by Taylor Nastally, 04/23/2024
+ * Project 1 for Comp 482
+ * */
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-/*
-* Made by Taylor Nastally, 04/23/2024
-* */
-
 public class Project1 {
     public static void main(String[] args) {
-        // calculateRuntime();
+        //calculateRuntime();
         String fileContents = getFile();
         if (fileContents == null) {
             System.out.println("File not found or other error occurred. Exiting.");
@@ -33,7 +34,8 @@ public class Project1 {
     /*
     * debug and optimization function
     * remove before submission
-    *
+    **/
+    /*
    private static void calculateRuntime() {
         // Get the Java runtime
         Runtime runtime = Runtime.getRuntime();
@@ -102,10 +104,10 @@ public class Project1 {
         for (int i = 0; i < size; i++) {
             manCurrentWifeIndexAndValue = getCurrentWifeIndex(menPreferences, matching, i);
             womanCurrentHusbandIndexAndValue = getCurrentHusbandIndex(womenPreferences, matching, i);
-            for (int k = 0; k < size; k++) {
+            for (int j = 0; j < size; j++) {
                 // If both man and woman prefer each other over their current partners, it's an instability
-                if (menPreferences[i][k] != manCurrentWifeIndexAndValue[0] && k < manCurrentWifeIndexAndValue[1] &&
-                        womenPreferences[i][k] != womanCurrentHusbandIndexAndValue[0] && k < womanCurrentHusbandIndexAndValue[1])
+                if (menPreferences[i][j] != manCurrentWifeIndexAndValue[0] && j < manCurrentWifeIndexAndValue[1] &&
+                        womenPreferences[i][j] != womanCurrentHusbandIndexAndValue[0] && j < womanCurrentHusbandIndexAndValue[1])
                     instabilities++;
             }
         }
@@ -133,8 +135,10 @@ public class Project1 {
     private static int[] getCurrentWifeIndex(int[][] preferences, int[][] matching, int husband) {
         int[] result = new int[2];
         for (int[] pairing : matching) {
-            if (pairing[0] == husband + 1)
+            if (pairing[0] == husband + 1) {
                 result[0] = pairing[1];
+                break;
+            }
         }
         for (int i = 0; i < preferences[husband].length; i++) {
             if (preferences[husband][i] == result[0]) {

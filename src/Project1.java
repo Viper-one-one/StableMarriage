@@ -6,11 +6,12 @@
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.CompletableFuture;
 
 public class Project1 {
     public static void main(String[] args) {
-        //calculateRuntime();
-        String fileContents = getFile();
+        calculateRuntime();
+        /*String fileContents = getFile();
         if (fileContents == null) {
             System.out.println("File not found or other error occurred. Exiting.");
             return;
@@ -28,14 +29,13 @@ public class Project1 {
         int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
 
         int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
-        System.out.println(instabilities);
+        System.out.println(instabilities);*/
     }
 
     /*
     * debug and optimization function
     * remove before submission
     **/
-    /*
    private static void calculateRuntime() {
         // Get the Java runtime
         Runtime runtime = Runtime.getRuntime();
@@ -57,25 +57,50 @@ public class Project1 {
         int size = Character.getNumericValue(sizeChar);
         System.out.println("Size of matrices: " + sizeChar + "\n");
 
+        /*CompletableFuture<int[][]> matrixOne = CompletableFuture.supplyAsync(() -> {
+            int rangeOne = getRange(size, 1);
+            return getPreferencesMatrix(fileContents, size, rangeOne);
+        });
+        CompletableFuture<int[][]> matrixTwo = CompletableFuture.supplyAsync(() -> {
+            int rangeTwo = getRange(size, 2);
+            return getPreferencesMatrix(fileContents, size, rangeTwo);
+        });
+
+        CompletableFuture<int[][]> matchingMatrix = CompletableFuture.supplyAsync(() -> getMatchingMatrix(fileContents, size));
+
+        try {
+            int[][] mensMatrix = matrixOne.get();
+            int[][] womensMatrix = matrixTwo.get();
+            int[][] match = matchingMatrix.get();
+
+            System.out.println("Extracted values from Matrix 1: ");
+            printMatrix(mensMatrix);
+            System.out.println();
+
+            System.out.println("Extracted values from Matrix 2: ");
+            printMatrix(womensMatrix);
+            System.out.println();
+
+            printMatrix(match);
+            System.out.println();
+
+            int instabilities = evaluateInstabilities(mensMatrix, womensMatrix, match);
+            System.out.println("Number of instabilities: " + instabilities);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
         int rangeOne = getRange(size, 1);
         int[][] matrixOne = getPreferencesMatrix(fileContents, size, rangeOne);
-        System.out.println("Extracted values from Matrix 1: ");
-        printMatrix(matrixOne);
-        System.out.println();
 
         int rangeTwo = getRange(size, 2);
         int[][] matrixTwo = getPreferencesMatrix(fileContents, size, rangeTwo);
-        System.out.println("Extracted values from Matrix 2: ");
-        printMatrix(matrixTwo);
-        System.out.println();
 
         int[][] matchingMatrix = getMatchingMatrix(fileContents, size);
-        System.out.println("Extracted values from Matching Matrix: ");
-        printMatrix(matchingMatrix);
-        System.out.println();
 
         int instabilities = evaluateInstabilities(matrixOne, matrixTwo, matchingMatrix);
-        System.out.println("Number of instabilities: " + instabilities);
+        System.out.println(instabilities);
+
         // Record end time
         long endTime = System.currentTimeMillis();
         // Run the garbage collector again
@@ -91,7 +116,7 @@ public class Project1 {
         System.out.println("Time taken: " + timeTaken + " milliseconds");
         System.out.println("Memory used: " + memoryUsed + " bytes");
         System.out.println("Memory used: " + memoryUsedInMB + " MB");
-    }*/
+    }
 
     private static int evaluateInstabilities(int[][] menPreferences, int[][] womenPreferences, int[][] matching) {
         int size = menPreferences.length;
